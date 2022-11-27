@@ -5,11 +5,9 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class Rent {
-    private int id;
-    private Client client;
-    private Car car;
+public class RentRequest {
+    private int clientId;
+    private int carId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private int price;
 }

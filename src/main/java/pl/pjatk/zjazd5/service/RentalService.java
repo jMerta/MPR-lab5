@@ -1,5 +1,6 @@
 package pl.pjatk.zjazd5.service;
 
+import org.springframework.stereotype.Service;
 import pl.pjatk.zjazd5.exception.DatabaseException;
 import pl.pjatk.zjazd5.exception.ValidationException;
 import pl.pjatk.zjazd5.model.Car;
@@ -7,6 +8,7 @@ import pl.pjatk.zjazd5.repository.CarRepository;
 
 import java.util.Optional;
 
+@Service
 public class RentalService {
 
 
@@ -16,8 +18,9 @@ public class RentalService {
         this.carRepository = carRepository;
     }
 
-    public void rentCar() {
 
+    public void rentCar() {
+        //TODO
     }
 
     public void addNewCar(Car car) {

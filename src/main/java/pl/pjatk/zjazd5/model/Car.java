@@ -13,5 +13,5 @@ public class Car {
     private final CarClass carClass;
     private boolean isRented;
     //TODO
-    private final Double dailyRate;
+    private final int dailyRate;
 }
