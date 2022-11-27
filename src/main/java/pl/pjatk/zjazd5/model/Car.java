@@ -12,6 +12,5 @@ public class Car {
     private final String vin;
     private final CarClass carClass;
     private boolean isRented;
-    //TODO
     private final int dailyRate;
 }
