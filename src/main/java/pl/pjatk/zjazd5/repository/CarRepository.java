@@ -11,18 +11,32 @@ import java.util.Optional;
 public class CarRepository {
     private List<Car> carList = new ArrayList<>();
 
-    public void addCar(Car car) throws Exception {
+    public void save(Car car) throws Exception {
         if (carList.contains(car)) {
             throw new Exception();
         }
         carList.add(car);
     }
 
-    public Optional<Car> findCarById(int id) {
+    public Optional<Car> findById(int id) {
         return carList.stream().filter(it -> it.getId() == id).findFirst();
     }
 
     public void removeAll() {
         carList = new ArrayList<>();
+    }
+
+    public List<Car> findAll() {
+        return carList;
+    }
+
+    public void setRentalStatus(Car car, boolean isRented) {
+        carList.stream()
+                .filter(it -> it.equals(car))
+                .forEach(it -> it.setRented(isRented));
+    }
+
+    public List<Car> findAllByIsRented(boolean isRented) {
+        return carList.stream().filter(it -> it.isRented() == isRented).toList();
     }
 }

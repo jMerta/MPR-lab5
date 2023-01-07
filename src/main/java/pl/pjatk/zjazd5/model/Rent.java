@@ -1,15 +1,18 @@
 package pl.pjatk.zjazd5.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
+@AllArgsConstructor
 public class Rent {
-    private int id;
+    private UUID id;
     private Client client;
     private Car car;
     private LocalDate startDate;
     private LocalDate endDate;
-    private int price;
+    private long price;
 }

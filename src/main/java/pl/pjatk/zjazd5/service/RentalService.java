@@ -1,48 +1,50 @@
 package pl.pjatk.zjazd5.service;
 
 import org.springframework.stereotype.Service;
-import pl.pjatk.zjazd5.exception.DatabaseException;
-import pl.pjatk.zjazd5.exception.ValidationException;
+import pl.pjatk.zjazd5.exception.RentException;
 import pl.pjatk.zjazd5.model.Car;
-import pl.pjatk.zjazd5.repository.CarRepository;
+import pl.pjatk.zjazd5.model.Rent;
+import pl.pjatk.zjazd5.model.RentRequest;
+import pl.pjatk.zjazd5.repository.RentRepository;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.UUID;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class RentalService {
 
+    private final CarService carService;
+    private final RentRepository rentRepository;
 
-    private final CarRepository carRepository;
-
-    public RentalService(CarRepository carRepository) {
-        this.carRepository = carRepository;
+    public RentalService(CarService carService, RentRepository rentRepository) {
+        this.carService = carService;
+        this.rentRepository = rentRepository;
     }
 
+    public Rent rentCar(RentRequest rentRequest) {
+        Car car = carService.findById(rentRequest.getCarId())
+                .orElseThrow(() -> new RentException("Car does not exist"));
 
-    public void rentCar() {
-        //TODO
-    }
+        if (car.isRented()) {
+            throw new RentException("Car is currently rented. Please look for another one.");
+        } else {
+            long totalPrice = car.getDailyRate() * DAYS.between(rentRequest.getStartDate(), rentRequest.getEndDate());
 
-    public void addNewCar(Car car) {
-        if (isInvalid(car.getVin())) {
-            throw new ValidationException("VIN is required!");
+            Rent rent = new Rent(UUID.randomUUID(), null, car, rentRequest.getStartDate(), rentRequest.getEndDate(), totalPrice);
+
+            rentRepository.save(rent);
+            carService.changeRentStatus(car, true);
+
+            return rent;
         }
-        if (isInvalid(car.getMake())) {
-            throw new ValidationException("Make is required!");
-        }
-
-        try {
-            carRepository.addCar(car);
-        } catch (Exception e) {
-            throw new DatabaseException("Database error: ", e);
-        }
     }
 
-    public Optional<Car> findCarById(int id) {
-        return carRepository.findCarById(id);
+    public List<Rent> findALl() {
+        List<Rent> rentList = rentRepository.findAll();
+
+        return rentList;
     }
 
-    private boolean isInvalid(String attribute) {
-        return attribute == null || attribute.isBlank();
-    }
 }
