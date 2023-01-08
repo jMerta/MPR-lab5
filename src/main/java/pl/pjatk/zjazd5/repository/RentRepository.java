@@ -20,4 +20,7 @@ public class RentRepository {
         return rentList;
     }
 
+    public void removeALl() {
+        rentList = new ArrayList<>();
+    }
 }
