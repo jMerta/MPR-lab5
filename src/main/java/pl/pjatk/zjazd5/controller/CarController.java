@@ -19,7 +19,7 @@ public class CarController {
         this.carService = carService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Car> createCar(@RequestBody Car car) {
         try {
             carService.create(car);
