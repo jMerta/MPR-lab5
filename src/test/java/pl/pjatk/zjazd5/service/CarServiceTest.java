@@ -10,6 +10,7 @@ import pl.pjatk.zjazd5.model.Car;
 import pl.pjatk.zjazd5.model.CarClass;
 import pl.pjatk.zjazd5.repository.CarRepository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -58,7 +59,7 @@ class CarServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidCar")
-    void shouldThrowValidationException(Car car, String message){
+    void shouldThrowValidationException(Car car, String message) {
         ValidationException validationException = assertThrows(ValidationException.class, () -> carService.create(car));
 
         assertEquals(validationException.getMessage(), message);
