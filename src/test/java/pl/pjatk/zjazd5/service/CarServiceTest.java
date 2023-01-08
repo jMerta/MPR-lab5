@@ -51,13 +51,17 @@ class CarServiceTest {
     void shouldThrowValidationExceptionWhenVinIsEmpty() {
         Car car = new Car(0, "make", "model", "", CarClass.STANDARD,false, 50);
 
-        assertThrows(ValidationException.class, ()-> carService.create(car), "VIN is required!" );
+        ValidationException validationException = assertThrows(ValidationException.class, () -> carService.create(car));
+
+        assertEquals(validationException.getMessage(), "VIN is required!");
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidCar")
     void shouldThrowValidationException(Car car, String message){
-        assertThrows(ValidationException.class, ()-> carService.create(car), message);
+        ValidationException validationException = assertThrows(ValidationException.class, () -> carService.create(car));
+
+        assertEquals(validationException.getMessage(), message);
     }
 
 
@@ -67,7 +71,7 @@ class CarServiceTest {
                 Arguments.of(new Car(0, "make", "model", "", CarClass.STANDARD,false, 50),"VIN is required!" ),
                 Arguments.of(new Car(0, "make", "model", null, CarClass.STANDARD,false, 50), "VIN is required!"),
                 Arguments.of(new Car(0, "", "model", "vin", CarClass.STANDARD,false, 50),"Make is required!"),
-                Arguments.of(new Car(0, null, "model", "", CarClass.STANDARD,false, 50), "Make is required!")
+                Arguments.of(new Car(0, null, "model", "vin", CarClass.STANDARD,false, 50), "Make is required!")
         );
     }
 }
