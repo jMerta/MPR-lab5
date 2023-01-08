@@ -8,6 +8,7 @@ group = "pl.pjatk"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
+
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -31,6 +32,36 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 
+sourceSets.create("integrationTest") {
+    java.srcDir("src/integrationTest/java")
+    java.srcDir("build/generated/source/apt/integrationTest")
+    resources.srcDir("src/integrationTest/resources")
+
+    compileClasspath += sourceSets["main"].output
+    runtimeClasspath += sourceSets["main"].output
+}
+
+val integrationTestImplementation by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+    extendsFrom(configurations.testImplementation.get())
+}
+
+configurations["integrationTestRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get())
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+
+val integrationTest = task<Test>("integrationTest") {
+    description = "Runs integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+
+    shouldRunAfter("test")
+
+    useJUnitPlatform()
+}
+
+tasks.check { dependsOn(integrationTest) }
