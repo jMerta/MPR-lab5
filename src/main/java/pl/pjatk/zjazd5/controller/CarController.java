@@ -38,7 +38,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCar(@PathParam("id") int id) {
+    public ResponseEntity<Car> getCar(@PathVariable int id) {
         Optional<Car> car = carService.findById(id);
 
         return car.map(ResponseEntity::ok)

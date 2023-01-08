@@ -17,8 +17,7 @@ import pl.pjatk.zjazd5.repository.RentRepository;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -55,7 +54,7 @@ class RentControllerIntegrationTest {
                 .expectBody(Rent.class)
                 .returnResult().getResponseBody();
 
-        assertTrue(result != null);
+        assertNotNull(result);
         assertEquals(result.getPrice(), 250);
 
         assertTrue(rentRepository.findAll().contains(result));
